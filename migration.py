@@ -273,4 +273,4 @@ def setup_migration(app, env, db, client_id, core_errors, owner_logged_in,
         return public_notice("authorized")
 
     app.register_blueprint(bp)
-    return complete_oauth, ready, campaign, now_utc
+    return complete_oauth, ready, campaign, now_utc, tuple(problems)
