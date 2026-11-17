@@ -94,3 +94,11 @@ $rng.Dispose()
 - https://vercel.com/docs/environment-variables
 - https://docs.discord.com/developers/topics/oauth2
 - https://docs.discord.com/developers/resources/guild#add-guild-member
+
+### Diagnóstico sem segredos
+
+O endpoint `/diagnostico` mostra quais variáveis estão definidas e quais
+validações de formato falharam, sem expor nenhum valor. Ele não comprova
+que os tokens externos ou a rede com MongoDB estão funcionando.
+O endpoint compara apenas o hostname atual com `PUBLIC_BASE_URL` para
+avisar quando o acesso foi feito por um endereço de preview.

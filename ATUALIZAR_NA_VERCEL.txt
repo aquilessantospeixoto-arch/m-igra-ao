@@ -1,0 +1,38 @@
+PXzx Store — SOLUÇÃO DO ERRO /DIAGNOSTICO 404
+=============================================
+
+O ZIP anterior já continha a rota /diagnostico, mas o domínio mostrado na captura
+continuava exibindo 404. Isso quer dizer que o domínio NÃO estava executando
+a versão que contém essa rota (ou o build foi feito a partir de outra pasta/branch).
+
+1. Extraia este ZIP NO SEU COMPUTADOR.
+2. Abra o repositório no GitHub VINCULADO AO PROJETO m-igra-ao DA VERCEL.
+3. Substitua app.py, migration.py, requirements.txt e as pastas templates/ e public/
+   na RAIZ DO REPOSITÓRIO (não dentro de uma pasta ZIP, nem de uma pasta extra).
+4. Clique Commit changes e confira qual branch foi atualizado (geralmente main).
+5. Na Vercel: Project > Settings > Git: confira se esse é o repositório e a
+   Production Branch correta. Project > Settings > Build and Deployment:
+   Root Directory deve apontar para a pasta onde está app.py, normalmente a raiz.
+6. Vercel > Deployments: confira se o deploy do NOVO commit terminou Ready
+   e se está marcado como Production. Se necessário, redeploy o commit correto.
+7. Abra https://m-igra-ao.vercel.app/versao
+   Deve exibir: PXZX-2026-11-17-CHECK
+8. Abra https://m-igra-ao.vercel.app/diagnostico
+   Veja quais variáveis não são reconhecidas. Não compartilhe segredos.
+
+SE /VERSAO DER 404 OU NÃO MOSTRAR A VERSÃO:
+- O novo app.py não foi publicado no domínio.
+- Verifique o repositório Git, a branch Production, Root Directory e o alias de domínio.
+- Não adianta trocar token do Discord enquanto /versao não for atualizado.
+
+CONFIGURAÇÃO:
+- Variáveis de ambiente necessárias devem estar no MESMO projeto da Vercel,
+  marcadas para Production; publicar novamente após alterá-las.
+- PUBLIC_BASE_URL deve ser https://m-igra-ao.vercel.app, se esse é o domínio
+  final. No Discord OAuth2 Redirects, cadastre
+  https://m-igra-ao.vercel.app/auth/discord/callback
+- MIGRATION_ENCRYPTION_KEY deve ser uma chave Fernet (32 bytes em Base64 URL-safe).
+- O diagnóstico mostra apenas se variáveis foram preenchidas e se o formato
+  aparenta estar correto: NÃO testa conectividade completa com Discord/MongoDB.
+
+NÃO envie tokens, .env, secrets nem senhas ao GitHub ou em capturas.

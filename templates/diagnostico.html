@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Diagnóstico — Migração{% endblock %}
+{% block content %}
+<main class="internal-page container diagnostic-page">
+  <div class="back-link"><a href="{{ url_for('migration.migrate') }}">← Voltar à migração</a><span> / DIAGNÓSTICO</span></div>
+  <div class="page-header"><div><div class="eyebrow">PAINEL DE CONFIGURAÇÃO</div><h1>Diagnóstico<br><em>do site.</em></h1><p>Confira o que está chegando à Vercel sem mostrar tokens, senhas ou URLs secretas.</p></div><div class="header-stamp">PXZX<br><span>EST. 2026</span></div></div>
+  <div class="panel-box diagnostics">
+    <p class="mono">VERSÃO PUBLICADA: {{ build_version }}</p>
+    <div class="panel-caption"><span>01 / VARIÁVEIS</span><span>{% if is_ready %}CONFIGURAÇÃO VÁLIDA{% else %}VERIFICAR CONFIGURAÇÃO{% endif %}</span></div>
+    <h2>{% if is_ready %}Os campos obrigatórios foram reconhecidos.{% else %}A migração ainda não foi ativada.{% endif %}</h2>
+    <p>O status abaixo indica apenas se o campo está preenchido. Um valor preenchido ainda pode estar incorreto ou a conexão externa pode falhar.</p>
+    <div class="diagnostic-grid">
+      {% for name, configured in checks %}
+      <div class="diagnostic-item"><span class="mono">{{ name }}</span><span class="diagnostic-tag {% if configured %}diagnostic-ok{% else %}diagnostic-missing{% endif %}">{% if configured %}Preenchida{% else %}Ausente{% endif %}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+  {% if issues %}
+  <section class="panel-box diagnostics"><div class="panel-caption"><span>02 / PROBLEMAS DETECTADOS</span><span>{{ issues|length }} ITEM(NS)</span></div><h2>Corrija estes campos</h2><ul class="config-list">{% for issue in issues %}<li>{{ issue }}</li>{% endfor %}</ul><p>Vá em Vercel → projeto correto → Settings → Environment Variables → Production. Depois publique um novo deployment.</p></section>
+  {% endif %}
+  {% if domain_warning %}
+  <section class="panel-box diagnostics"><div class="panel-caption"><span>03 / DOMÍNIO</span><span>AVISO</span></div><h2>Este endereço é diferente do domínio configurado.</h2><p>Se você abriu o link de prévia de um deployment, isso é normal. Para autorizar com Discord, use o domínio de produção definido em <code>PUBLIC_BASE_URL</code> e cadastre nesse domínio o callback <code>/auth/discord/callback</code>.</p></section>
+  {% endif %}
+  <div class="panel-box diagnostics"><div class="panel-caption"><span>SEGURANÇA</span><span>PRIVACIDADE</span></div><p>Esta tela não testa se o token do bot é aceito, se o membro tem permissão ou se o MongoDB responde. Nenhum valor de credencial é mostrado aqui. Não envie capturas com segredos visíveis.</p></div>
+</main>
+{% endblock %}

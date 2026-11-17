@@ -43,3 +43,19 @@ SE A MIGRAÇÃO NÃO APARECER
 NÃO coloque seu token nem seu arquivo .env no GitHub.
 
 Leia README.md para a configuração e detalhes.
+
+NOVO: DIAGNÓSTICO DIRETO (NÃO MOSTRA SEGREDOS)
+Abra https://SEU-DOMINIO-DE-PRODUCAO/diagnostico
+Essa página lista apenas se cada variável foi preenchida e quais são
+as falhas de formato detectadas. Ela não exibe valores de tokens,
+senhas nem strings de conexão. Uma variável preenchida pode estar
+errada: para testar OAuth/MongoDB é preciso realizar o fluxo real.
+
+IMPORTANTE SOBRE URL DE PREVIEW:
+Os endereços longos de Deployments da Vercel são previews.
+Confira a aba Domains e use seu domínio de Production como
+PUBLIC_BASE_URL. Cadastre no Discord OAuth2 Redirects exatamente:
+https://SEU-DOMINIO-DE-PRODUCAO/auth/discord/callback
+
+Se você criou um NOVO projeto na Vercel, verifique as variáveis
+nesse novo projeto. Variáveis de outro projeto não são copiadas.

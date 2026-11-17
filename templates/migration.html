@@ -6,7 +6,7 @@
   <div class="page-header"><div><div class="eyebrow"><span class="pulse-dot"></span> MIGRAÇÃO DE COMUNIDADE</div><h1>Seu novo<br><em>destino.</em></h1><p>Confira os servidores e autorize sua entrada. Você tem o controle da decisão.</p></div><div class="header-stamp">PXZX<br><span>EST. 2026</span></div></div>
   {% if notice %}<div class="notice notice-soft" role="status"><svg class="ico"><use href="#ico-info"/></svg><p>{{ notice }}</p></div>{% endif %}
   {% if not ready %}
-  <div class="empty-state"><div class="empty-icon"><svg class="ico"><use href="#ico-lock"/></svg></div><h2>Ainda não está disponível</h2><p>A equipe está finalizando as configurações de migração. Tente novamente mais tarde.</p><a href="{{ url_for('index') }}" class="button button-outline">Voltar ao início</a></div>
+  <div class="empty-state"><div class="empty-icon"><svg class="ico"><use href="#ico-lock"/></svg></div><h2>Ainda não está disponível</h2><p>A equipe está finalizando as configurações de migração. Tente novamente mais tarde.</p><div class="empty-actions"><a href="{{ url_for('index') }}" class="button button-outline">Voltar ao início</a><a href="{{ url_for('diagnostico') }}" class="button button-outline">Ver diagnóstico de configuração</a></div></div>
   {% else %}
   <div class="migration-grid">
     <div class="migration-left">
