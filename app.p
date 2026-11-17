@@ -21,6 +21,7 @@ from migration import setup_migration
 
 DISCORD_ORIGIN = "https://discord.com"
 DISCORD_API = f"{DISCORD_ORIGIN}/api/v10"
+BUILD_VERSION = "PXZX-2026-11-17-CHECK"
 CORE_KEYS = (
     "PUBLIC_BASE_URL", "DISCORD_CLIENT_ID", "DISCORD_CLIENT_SECRET",
     "DASHBOARD_OWNER_ID", "BOT_MONGO_URI", "BOT_MONGO_DATABASE",
@@ -99,7 +100,8 @@ def create_app(env=None):
     @app.context_processor
     def common_vars():
         return {"is_owner": owner_logged_in(), "account": session.get("account", ""),
-                "csrf_token": csrf_token(), "site_name": "PXzx Store"}
+                "csrf_token": csrf_token(), "site_name": "PXzx Store",
+                "build_version": BUILD_VERSION}
 
     @app.after_request
     def secure_headers(response):
@@ -116,7 +118,13 @@ def create_app(env=None):
 
     @app.get("/health")
     def health():
-        return {"status": "ok", "configured": not bool(errors)}
+        return {"status": "ok", "configured": not bool(errors), "version": BUILD_VERSION}
+
+    @app.get("/versao")
+    def versao():
+        """Confirma qual versão está realmente publicada no domínio, sem expor segredos."""
+        return {"site": "PXzx Store", "version": BUILD_VERSION,
+                "diagnostico": "/diagnostico", "migracao": "/migrar"}
 
     @app.get("/")
     def index():
@@ -265,10 +273,25 @@ def create_app(env=None):
         return render_template("error.html", error_title=titles[error.code],
                                message=descriptions[error.code]), error.code
 
-    finish_member_oauth, migration_ready, migration_campaign, utcnow = setup_migration(
+    finish_member_oauth, migration_ready, migration_campaign, utcnow, migration_problems = setup_migration(
         app, env, db, v["DISCORD_CLIENT_ID"], errors, owner_logged_in,
         require_owner, require_csrf, start_oauth,
     )
+    @app.get("/diagnostico")
+    def diagnostico():
+        """Diagnóstico público seguro: somente nomes de variáveis e estados, sem valores."""
+        required = (*CORE_KEYS, "MIGRATION_BOT_TOKEN", "MIGRATION_SOURCE_ID",
+                    "MIGRATION_SOURCE_NAME", "MIGRATION_DESTINATION_ID",
+                    "MIGRATION_DESTINATION_NAME", "MIGRATION_ENCRYPTION_KEY")
+        checks = [(key, bool(str(env.get(key, "")).strip())) for key in required]
+        configured_host = urlsplit(base).hostname if base else None
+        current_host = request.host.split(":")[0].lower()
+        different_host = bool(configured_host and configured_host.lower() != current_host)
+        return render_template(
+            "diagnostico.html", checks=checks, issues=migration_problems,
+            is_ready=migration_ready, domain_warning=different_host,
+        )
+
     return app
 
 
